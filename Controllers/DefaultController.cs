@@ -70,8 +70,7 @@ namespace Web.Controllers
 					MarginRight = 10,
 					MarginTop = 20,
 					MarginBottom = 20,
-					CssMediaType = HtmlToPdfCssMediaType.Print,
-					CustomCSS = ""
+					CssMediaType = HtmlToPdfCssMediaType.Print
 				}
 			};
 
