@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
@@ -42,18 +41,20 @@ namespace Web
 				throw new ArgumentException(
 					$"{viewName} does not match any available view");
 
-
 			var actionContext = new ActionContext(
 				_httpContextAccessor.HttpContext ??
 				new DefaultHttpContext { RequestServices = _serviceProvider },
 				new RouteData(), new ActionDescriptor());
+
 			await using var sw = new StringWriter();
+
 			await viewResult.View.RenderAsync(new ViewContext(actionContext,
 				viewResult.View,
 				new ViewDataDictionary(new EmptyModelMetadataProvider(),
 					new ModelStateDictionary()) { Model = model },
 				new TempDataDictionary(actionContext.HttpContext,
 					_tempDataProvider), sw, new HtmlHelperOptions()));
+
 			return sw.ToString();
 		}
 	}

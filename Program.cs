@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using DinkToPdf;
 using DinkToPdf.Contracts;
@@ -29,8 +28,6 @@ namespace Web
 						})
 						.Configure((env, app) =>
 						{
-							Console.WriteLine(env.HostingEnvironment.ContentRootPath);
-							Console.WriteLine(env.HostingEnvironment.WebRootPath);
 							if (env.HostingEnvironment.IsDevelopment())
 								app.UseDeveloperExceptionPage();
 							else

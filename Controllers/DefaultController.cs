@@ -1,9 +1,7 @@
 using System;
-using System.IO;
 using System.Threading.Tasks;
 using DinkToPdf;
 using DinkToPdf.Contracts;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using NodaTime;
 using NodaTime.Extensions;
@@ -17,25 +15,22 @@ namespace Web.Controllers
 	{
 		private readonly IConverter _converter;
 		private readonly IViewRenderService _viewRenderService;
+		private readonly QuoteModel _quoteModel = new QuoteModel
+		{
+			NamedInsured = "GWARbar",
+			QuoteDate =
+				SystemClock.Instance
+					.InZone(DateTimeZoneProviders.Tzdb["America/Denver"])
+					.GetCurrentDate(),
+			PolicyEffectiveDate = SystemClock.Instance
+				.InZone(DateTimeZoneProviders.Tzdb["America/Denver"])
+				.GetCurrentDate().PlusDays(15)
+		};
 
-		private readonly QuoteModel _quoteModel;
-
-		public DefaultController(IConverter converter, IViewRenderService viewRenderService, IWebHostEnvironment webHostEnvironment)
+		public DefaultController(IConverter converter, IViewRenderService viewRenderService)
 		{
 			_converter = converter;
 			_viewRenderService = viewRenderService;
-			_quoteModel = new QuoteModel
-			{
-				NamedInsured = "GWARbar",
-				QuoteDate =
-					SystemClock.Instance
-						.InZone(DateTimeZoneProviders.Tzdb["America/Denver"])
-						.GetCurrentDate(),
-				PolicyEffectiveDate = SystemClock.Instance
-					.InZone(DateTimeZoneProviders.Tzdb["America/Denver"])
-					.GetCurrentDate().PlusDays(15)
-			};
-			ViewBag.FilePath = Path.Combine(webHostEnvironment.WebRootPath, @"Content\images\svg-defs.svg");
 		}
 
 		[HttpGet("dink")]
