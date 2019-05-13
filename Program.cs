@@ -39,7 +39,7 @@ namespace Web
 								.UseEndpoints(endpoints =>
 								{
 									endpoints.MapControllers();
-									endpoints.MapRazorPages();
+									//endpoints.MapRazorPages();
 								});
 						});
 				})
