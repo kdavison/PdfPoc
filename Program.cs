@@ -36,8 +36,6 @@ namespace Web
 							app
 								.UseStaticFiles()
 								.UseRouting()
-								.UseAuthentication()
-								.UseAuthorization()
 								.UseEndpoints(endpoints =>
 								{
 									endpoints.MapControllers();
