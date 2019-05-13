@@ -1,0 +1,11 @@
+@using System.Globalization
+@model Web.Pages.QuoteModel
+@{
+  ViewBag.Title = $"Pie Insurance Quote {Model.NamedInsured}";
+}
+
+<table>
+  <tr><td>Named Insured:</td><td>@Model.NamedInsured</td></tr>
+  <tr><td>Policy Effective Date:</td><td>@Model.PolicyEffectiveDate.ToString("M/d/yyyy", CultureInfo.InvariantCulture)</td></tr>
+  <tr><td>Quote Date:</td><td>@Model.QuoteDate.ToString("M/d/yyyy", CultureInfo.InvariantCulture)</td></tr>
+</table>
