@@ -1,0 +1,8 @@
+version: '3.2'
+services:
+  pdfpoc:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    stdin_open: 'true'
+    tty: 'true'

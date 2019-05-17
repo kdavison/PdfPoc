@@ -1,0 +1,10 @@
+# ignore debug files
+./bin/Debug
+
+# ignore windows runtimes
+./bin/Release/*/runtimes/win
+
+# ignore object directory
+./obj
+
+./global.json
