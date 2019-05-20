@@ -6,17 +6,13 @@
 
   <ItemGroup>
     <None Remove="libwkhtmltox.*" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Include="libwkhtmltox.*">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Include="pdf.css" />
   </ItemGroup>
+
+
 
   <ItemGroup>
     <PackageReference Include="DinkToPdf" Version="1.0.8" />
