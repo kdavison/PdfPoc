@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Razor;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Routing;
@@ -32,14 +31,17 @@ namespace Web
 			_tempDataProvider = tempDataProvider;
 		}
 
-		public async Task<string> RenderViewAsync<T>(string viewName, T model) where T : PageModel
+		public async Task<string> RenderViewAsync<T>(string viewName, T model)
 		{
-			var viewResult =
-				_razorViewEngine.GetView("~/Pages/", $"{viewName}.cshtml",
-					true);
+			var viewResult = _razorViewEngine.GetView("~", viewName, true);
 			if (!viewResult.Success)
-				throw new ArgumentException(
-					$"{viewName} does not match any available view");
+			{
+				viewResult = _razorViewEngine.GetView("~/Pages/", $"{viewName}.cshtml", true);
+				if (!viewResult.Success)
+					throw new ArgumentException(
+						$"{viewName} does not match any available view");
+			}
+
 
 			var actionContext = new ActionContext(
 				_httpContextAccessor.HttpContext ??

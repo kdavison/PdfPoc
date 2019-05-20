@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using NodaTime;
 using NodaTime.Extensions;
 using SelectPdf;
-using Web.Pages;
+using Web.Models;
 
 namespace Web.Controllers
 {
@@ -15,7 +15,8 @@ namespace Web.Controllers
 	{
 		private readonly IConverter _converter;
 		private readonly IViewRenderService _viewRenderService;
-		private readonly QuoteModel _quoteModel = new QuoteModel
+
+		private readonly QuoteResponse _quoteModel = new QuoteResponse
 		{
 			NamedInsured = "GWARbar",
 			QuoteDate =
@@ -27,7 +28,8 @@ namespace Web.Controllers
 				.GetCurrentDate().PlusDays(15)
 		};
 
-		public DefaultController(IConverter converter, IViewRenderService viewRenderService)
+		public DefaultController(IConverter converter,
+			IViewRenderService viewRenderService)
 		{
 			_converter = converter;
 			_viewRenderService = viewRenderService;
@@ -35,23 +37,40 @@ namespace Web.Controllers
 
 		[HttpGet("dink")]
 		public async Task<FileContentResult> GetDinkAsync() =>
-			File(_converter.Convert(new HtmlToPdfDocument
-			{
-				GlobalSettings = {
-					ColorMode = ColorMode.Color,
-					Orientation = Orientation.Portrait,
-					PaperSize = PaperKind.A4
-				},
-				Objects =
+			File(
+				_converter.Convert(new HtmlToPdfDocument
 				{
-					new ObjectSettings {
-						PagesCount = true,
-						HtmlContent = await _viewRenderService.RenderViewAsync("Quote", _quoteModel),
-						WebSettings = { DefaultEncoding = "utf-8" },
-						HeaderSettings = { FontSize = 9, Right = "Page [page] of [toPage]", Line = true, Spacing = 2.812 }
+					GlobalSettings
+						=
+						{
+							ColorMode = ColorMode.Color,
+							Orientation = Orientation.Portrait,
+							PaperSize = PaperKind.A4
+						},
+					Objects =
+					{
+						new ObjectSettings
+						{
+							PagesCount = true,
+							HtmlContent =
+								await _viewRenderService
+									.RenderViewAsync("Quote",
+										_quoteModel),
+							WebSettings =
+							{
+								DefaultEncoding = "utf-8"
+							},
+							HeaderSettings =
+							{
+								FontSize = 9,
+								Right =
+									"Page [page] of [toPage]",
+								Line = true,
+								Spacing = 2.812
+							}
+						}
 					}
-				}
-			}), "application/pdf", "PieQuoteDink.pdf");
+				}), "application/pdf", "PieQuoteDink.pdf");
 
 		[HttpGet("select")]
 		public async Task<FileContentResult> GetSelectAsync()
@@ -75,13 +94,14 @@ namespace Web.Controllers
 			};
 
 			// create a new pdf document converting an url
-			var doc = converter.ConvertHtmlString(await _viewRenderService.RenderViewAsync("Quote", _quoteModel));
+			var doc = converter.ConvertHtmlString(
+				await _viewRenderService.RenderViewAsync("Quote", _quoteModel));
 			var result = converter.ConversionResult;
-
 			doc.DocumentInformation.Title = result.WebPageInformation.Title;
-			doc.DocumentInformation.Subject = result.WebPageInformation.Description;
-			doc.DocumentInformation.Keywords = result.WebPageInformation.Keywords;
-
+			doc.DocumentInformation.Subject =
+				result.WebPageInformation.Description;
+			doc.DocumentInformation.Keywords =
+				result.WebPageInformation.Keywords;
 			doc.DocumentInformation.Author = "Aaron Holderman";
 			doc.DocumentInformation.CreationDate = DateTime.UtcNow;
 
